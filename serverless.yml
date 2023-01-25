@@ -5,13 +5,31 @@ provider:
   name: aws
   runtime: nodejs14.x
   region: us-east-1
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:PutItem
+            - dynamodb:Get*
+            - dynamodb:Scan*
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+          Resource: 
+            - arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/Users
 
 functions:
-  hello:
-    handler: src/handler.hello
+  createUser:
+    handler: src/createUser.createUser
     events:
       - httpApi:
-          path: /
+          path: /User
+          method: post
+  getUsers:
+    handler: src/getUsers.getUsers
+    events:
+      - httpApi:
+          path: /User
           method: get
 
 resources:
@@ -20,10 +38,10 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: Users
-        BillingMode: PAY_PER_REQUEST
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
         KeySchema:
           - AttributeName: id
             KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
