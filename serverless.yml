@@ -25,12 +25,30 @@ functions:
       - httpApi:
           path: /User
           method: post
+  getUser:
+    handler: src/getUser.getUser
+    events:
+      - httpApi:
+          path: /User/{id}
+          method: get
   getUsers:
     handler: src/getUsers.getUsers
     events:
       - httpApi:
           path: /User
           method: get
+  updateUser:
+    handler: src/updateUser.updateUser
+    events:
+      - httpApi:
+          path: /User/{id}
+          method: put
+  deleteUser:
+    handler: src/deleteUser.deleteUser
+    events:
+      - httpApi:
+          path: /User/{id}
+          method: delete
 
 resources:
   Resources:
